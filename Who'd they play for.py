@@ -44,7 +44,7 @@ def load_latest_game_date():
     :return: Date of the latest game included in the dataframe.
     """
     # Connect to SQL server.
-    sql_engine = connect_to_sql_alchemy_server(server_type="prod")
+    sql_engine = connect_to_sql_alchemy_server()
 
     # Select latest game date.
     query = """
@@ -69,7 +69,7 @@ def load_players(minimum_seasons):
     """
 
     # Connect to SQL server.
-    sql_engine = connect_to_sql_alchemy_server(server_type="prod")
+    sql_engine = connect_to_sql_alchemy_server()
 
     # SQL query for unique players.
     query = f"""
@@ -99,7 +99,7 @@ def load_players_data(player_name):
     """
 
     # Connect to SQL server.
-    sql_engine = connect_to_sql_alchemy_server(server_type="prod")
+    sql_engine = connect_to_sql_alchemy_server()
 
     # SQL query for teams that the generated player has played for and number of seasons they've played.
     query = alc.text("""
@@ -132,7 +132,7 @@ def load_unique_teams():
     """
 
     # Connect to SQL server.
-    sql_engine = connect_to_sql_alchemy_server(server_type="prod")
+    sql_engine = connect_to_sql_alchemy_server()
 
     # SQL query for all teams to have played in Europe.
     query = f"""
@@ -326,7 +326,7 @@ def create_streamlit_app():
     )
 
     # Define the positions for the page's headers
-    header1, header2 = st.columns([3, 1]) 
+    header1, header2 = st.columns([3, 1])
 
     # Header 1: Displays the date that the last game comes from.
     with header1:
