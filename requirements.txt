@@ -3,6 +3,5 @@ pymssql
 pandas
 streamlit
 sqlalchemy
-random
 time
 base64
