@@ -301,7 +301,7 @@ def create_streamlit_app():
     # Set up page configuration.
     st.set_page_config(
         page_title="Who'd they play for?",
-        page_icon="C:/Users/conor/OneDrive/Desktop/OneTouch/Images/Logo_Youtube.png",
+        page_icon="Logo_Youtube.png",
         layout="wide",
         initial_sidebar_state="expanded",
         menu_items={
@@ -317,7 +317,7 @@ def create_streamlit_app():
         f"""
         <a href="https://onetouchinsights.com/" target="_blank" rel="noopener noreferrer">
             <img src="data:image/png;base64,
-            {base64.b64encode(open("C:/Users/conor/OneDrive/Desktop/OneTouch/Images/Logo.png", "rb").read()).decode()}"
+            {base64.b64encode(open("Logo.png", "rb").read()).decode()}"
             alt="OneTouchInsights"
             style="width:200px; height:60px;"/>
         </a>
