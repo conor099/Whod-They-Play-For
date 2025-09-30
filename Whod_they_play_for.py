@@ -279,7 +279,7 @@ def render_level(level, min_seasons):
 
                 # New player loaded for level 1 as game restarts.
                 if lvl == 1:
-                    st.session_state[f"level_1_selection"] = []
+                    del st.session_state[f"level_{lvl}_selection"]
                     st.session_state[f"level_{lvl}_player"] = random.choice(load_players(minimum_seasons=10))
 
                 # Delete player from all other levels so they can be generated again if user makes it that far.
