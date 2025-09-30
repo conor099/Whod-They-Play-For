@@ -326,7 +326,7 @@ def create_streamlit_app():
     )
 
     # Define the positions for the page's headers
-    header1, header2 = st.columns([3, 1])  # adjust proportions
+    header1, header2 = st.columns([3, 1]) 
 
     # Header 1: Displays the date that the last game comes from.
     with header1:
