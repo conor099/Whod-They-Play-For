@@ -3,4 +3,3 @@ pymssql
 pandas
 streamlit
 sqlalchemy
-base64
