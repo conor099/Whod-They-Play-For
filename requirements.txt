@@ -1,5 +1,4 @@
 pyodbc
 pymssql
 pandas
-streamlit
 sqlalchemy
