@@ -220,7 +220,6 @@ def render_level(level, min_seasons):
     st.session_state[selection_key] = st.multiselect(
         f"Please select {len(level_answers)} teams:",
         options=load_unique_teams(),
-        # default=st.session_state[selection_key],
         key=f"multiselect_level_{level}"  # Unique key for each level.
     )
 
@@ -274,12 +273,16 @@ def render_level(level, min_seasons):
 
             # Reset all previous levels if answer wrong.
             for lvl in range(1, 11):
-                # Reset the multiselects.
-                st.session_state[f"level_{lvl}_selection"] = []
+                # Reset the stored selections
+                if f"level_{lvl}_selection" in st.session_state:
+                    del st.session_state[f"level_{lvl}_selection"]
+
+                # Reset the widget state as well
+                if f"multiselect_level_{lvl}" in st.session_state:
+                    del st.session_state[f"multiselect_level_{lvl}"]
 
                 # New player loaded for level 1 as game restarts.
                 if lvl == 1:
-                    del st.session_state[f"level_{lvl}_selection"]
                     st.session_state[f"level_{lvl}_player"] = random.choice(load_players(minimum_seasons=10))
 
                 # Delete player from all other levels so they can be generated again if user makes it that far.
