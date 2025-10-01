@@ -258,9 +258,12 @@ def render_level(level, min_seasons):
             wrong_answers = set(st.session_state[selection_key]) - set(level_answers)
             wrong_teams = ", ".join(team for team in wrong_answers)
 
+            # Extract how many answers the user got correct.
+            correct_answers = set(st.session_state[selection_key]) & set(level_answers)
+
             st.markdown(
                 f"<h1 style='color: #1C9CE0; font-size:14px;'>"
-                f"That is incorrect!<br><br>"
+                f"Unlucky, that is incorrect. You got {len(correct_answers)} out of {len(level_answers)} teams correct.<br><br>"
                 f"Incorrect teams: {wrong_teams}."
                 f"</h1>",
                 unsafe_allow_html=True
