@@ -263,7 +263,7 @@ def render_level(level, min_seasons):
 
             st.markdown(
                 f"<h1 style='color: #1C9CE0; font-size:14px;'>"
-                f"Unlucky, that is incorrect. You got {len(correct_answers)} out of {len(level_answers)} teams correct.<br><br>"
+                f"Unlucky, that is incorrect. You got {len(correct_answers)} out of {len(level_answers)} team(s) correct.<br><br>"
                 f"Incorrect team(s): {wrong_teams}."
                 f"</h1>",
                 unsafe_allow_html=True
@@ -271,8 +271,8 @@ def render_level(level, min_seasons):
             # Restart the game/quiz.
             st.write("🔄 Restarting game...")
 
-            # Sleep for 2 seconds so users can read that their answers were wrong.
-            time.sleep(2)
+            # Sleep for 3 seconds so users can read that their answers were wrong.
+            time.sleep(3)
 
             # Reset all previous levels if answer wrong.
             for lvl in range(1, 11):
