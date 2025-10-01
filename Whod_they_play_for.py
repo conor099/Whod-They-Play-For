@@ -264,7 +264,7 @@ def render_level(level, min_seasons):
             st.markdown(
                 f"<h1 style='color: #1C9CE0; font-size:14px;'>"
                 f"Unlucky, that is incorrect. You got {len(correct_answers)} out of {len(level_answers)} teams correct.<br><br>"
-                f"Incorrect teams: {wrong_teams}."
+                f"Incorrect team(s): {wrong_teams}."
                 f"</h1>",
                 unsafe_allow_html=True
             )
