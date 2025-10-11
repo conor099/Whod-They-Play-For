@@ -238,7 +238,8 @@ def render_level(level, min_seasons, starting_min_seasons):
             if level == 10:
                 st.markdown(
                     f"<h1 style='color: #1C9CE0; font-size:14px;'>"
-                    f"You have completed the game, congratulations! <br></h1>",
+                    f"You have completed the game, congratulations! 🥳 🎉<br><br>"
+                    f"Please feel free to try a new difficulty level 😊.</h1>",
                     unsafe_allow_html=True
                 )
 
