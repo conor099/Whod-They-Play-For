@@ -386,17 +386,35 @@ def create_streamlit_app():
             unsafe_allow_html=True
         )
 
-    # Generate random player for each level 1-10.
-    for level in range(1, 11):
-        # Define minimum seasons played for each level (Level 1 = 10, Level 2 = 9, etc.)
-        min_seasons = 19 - level
+    # Dictionary for storing the starting minimum number of seasons for each difficulty.
+    game_difficulty = {
+        "Easy" : 17,
+        "Normal" : 14,
+        "Hard" : 10
+    }
 
-        # See if user passed each level.
-        passed = render_level(level, min_seasons, 18)
+    # Game difficulty selector for user.
+    difficulty_selection = st.selectbox(
+        label="Please select a difficulty:",
+        options=list(game_difficulty.keys())
+    )
 
-        # Don't load next levels if user gets the answer wrong.
-        if not passed:
-            break
+    # Start game based on the game difficulty selected.
+    if difficulty_selection:
+        # Generate random player for each level 1-10.
+        for level in range(1, 11):
+            # Define minimum seasons played for each level.
+            min_seasons = game_difficulty[difficulty_selection] + 1 - level
+
+            # See if user passed each level.
+            passed = render_level(level, min_seasons, game_difficulty[difficulty_selection])
+
+            # Don't load next levels if user gets the answer wrong.
+            if not passed:
+                break
+
+    else:
+        st.error("Please select a difficulty.")
 
 
 create_streamlit_app()
