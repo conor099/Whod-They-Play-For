@@ -277,11 +277,11 @@ def render_level(level, min_seasons, starting_min_seasons):
 
             # Reset all previous levels if answer wrong.
             for lvl in range(1, 11):
-                # Reset the stored selections
+                # Reset the stored selections.
                 if f"level_{lvl}_selection" in st.session_state:
                     del st.session_state[f"level_{lvl}_selection"]
 
-                # Reset the widget state as well
+                # Reset the widget state as well.
                 if f"multiselect_level_{lvl}" in st.session_state:
                     del st.session_state[f"multiselect_level_{lvl}"]
 
@@ -401,6 +401,16 @@ def create_streamlit_app():
 
     # Start game based on the game difficulty selected.
     if difficulty_selection:
+        # Reset all previous levels.
+        for lvl in range(1, 11):
+            # Reset the stored selections.
+            if f"level_{lvl}_selection" in st.session_state:
+                del st.session_state[f"level_{lvl}_selection"]
+
+            # Reset the widget state as well.
+            if f"multiselect_level_{lvl}" in st.session_state:
+                del st.session_state[f"multiselect_level_{lvl}"]
+
         # Generate random player for each level 1-10.
         for level in range(1, 11):
             # Define minimum seasons played for each level.
