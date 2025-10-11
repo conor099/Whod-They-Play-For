@@ -162,7 +162,7 @@ def render_level(level, min_seasons, starting_min_seasons):
     """
     # Load all players who have played the minimum number of seasons specified. Don't include players used in previous levels.
     level_players = [p for p in load_players(minimum_seasons=min_seasons) if p not in st.session_state.values()]
-    number_level_players = len(level_players)
+    number_level_players = len(level_players) + 1
 
     # Level title and line under title.
     st.markdown(
