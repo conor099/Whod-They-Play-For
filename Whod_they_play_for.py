@@ -412,7 +412,7 @@ def create_streamlit_app():
                 del st.session_state[f"multiselect_level_{lvl}"]
 
             # Reset the previously selected players.
-            del st.session_state[f"level_{lvl}_selection"]
+            st.session_state[f"level_{lvl}_selection"] = []
 
         # Generate random player for each level 1-10.
         for level in range(1, 11):
