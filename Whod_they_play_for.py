@@ -159,8 +159,8 @@ def render_level(level, min_seasons):
     :param min_seasons: Minimum seasons for the selected level.
     :return: True/False for if player passed level or not.
     """
-    # Load all players who have played the minimum number of seasons specified.
-    level_players = load_players(minimum_seasons=min_seasons)
+    # Load all players who have played the minimum number of seasons specified. Don't include players used in previous levels.
+    level_players = [p for p in load_players(minimum_seasons=min_seasons) if p not in st.session_state.values()]
     number_level_players = len(level_players)
 
     # Level title and line under title.
@@ -222,6 +222,7 @@ def render_level(level, min_seasons):
         options=load_unique_teams(),
         key=f"multiselect_level_{level}"  # Unique key for each level.
     )
+    st.write(f"{level_players}")
 
     # When all teams are selected, see if the answers from the user are correct.
     if len(st.session_state[selection_key]) == len(level_answers):
@@ -313,9 +314,11 @@ def create_streamlit_app():
         initial_sidebar_state="expanded",
         menu_items={
             'Report a bug': "mailto:contact@onetouchinsights.com",
-            'About': "All data comes from Fbref European matches from 1990-2025. 2 seasons of European Cup (1990-1992), "
-                     "35 seasons of Champions League (1992-Present), 20 seasons of UEFA Cup (1990-2009), 16 seasons of "
-                     "Europa League (2010-Present), and 4 seasons of Europa Conference League (2021-Present)."
+            'About': "All data comes from Fbref Champions League games (1992-Present- Latest game date in the top left). "
+                     "A player is considered to have played a season if they made a minimum of 1 appearance during that season. "
+                     "Players who have the had another player with the same name (E.g. Marcelo- Left back for Real Madrid/CB "
+                     "for Lyon & Besiktas) also play in a European Competition have extra info including their nationality, "
+                     "seasons played and Fbref id. You can Google this id to see exactly who the player is."
         }
     )
 
@@ -386,7 +389,7 @@ def create_streamlit_app():
     # Generate random player for each level 1-10.
     for level in range(1, 11):
         # Define minimum seasons played for each level (Level 1 = 10, Level 2 = 9, etc.)
-        min_seasons = 11 - level
+        min_seasons = 19 - level
 
         # See if user passed each level.
         passed = render_level(level, min_seasons)
