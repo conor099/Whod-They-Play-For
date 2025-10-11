@@ -392,7 +392,7 @@ def create_streamlit_app():
         min_seasons = 19 - level
 
         # See if user passed each level.
-        passed = render_level(level, min_seasons)
+        passed = render_level(level, min_seasons, 18)
 
         # Don't load next levels if user gets the answer wrong.
         if not passed:
