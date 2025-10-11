@@ -388,6 +388,7 @@ def create_streamlit_app():
 
     # Dictionary for storing the starting minimum number of seasons for each difficulty.
     game_difficulty = {
+        "Select a difficulty level" : 0,
         "Easy" : 17,
         "Normal" : 14,
         "Hard" : 10
@@ -400,7 +401,7 @@ def create_streamlit_app():
     )
 
     # Start game based on the game difficulty selected.
-    if difficulty_selection:
+    if difficulty_selection != "Select a difficulty level":
         # Reset all previous levels.
         for lvl in range(1, 11):
             # Reset the stored selections.
