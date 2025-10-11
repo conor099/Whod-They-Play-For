@@ -402,18 +402,25 @@ def create_streamlit_app():
 
     # Start game based on the game difficulty selected.
     if difficulty_selection != "Select a difficulty level":
-        # Reset all previous levels.
-        for lvl in range(1, 11):
-            # Reset the stored selections.
-            if f"level_{lvl}_selection" in st.session_state:
-                del st.session_state[f"level_{lvl}_selection"]
+        # Track previous difficulty to see if the user has selected a new difficulty.
+        if "current_difficulty" not in st.session_state:
+            st.session_state["current_difficulty"] = difficulty_selection
 
-            # Reset the widget state as well.
-            if f"multiselect_level_{lvl}" in st.session_state:
-                del st.session_state[f"multiselect_level_{lvl}"]
+        # If the user changes the difficulty, reset all the levels.
+        if st.session_state["current_difficulty"] != difficulty_selection:
+            for lvl in range(1, 11):
+                # Remove player selections and multiselect widgets.
+                st.session_state.pop(f"level_{lvl}_selection", None)
+                st.session_state.pop(f"multiselect_level_{lvl}", None)
 
-            # Reset the previously selected players.
-            st.session_state[f"level_{lvl}_selection"] = []
+                # Remove the stored player for each level.
+                st.session_state.pop(f"level_{lvl}_player", None)
+
+            # Update difficulty to newly selected.
+            st.session_state["current_difficulty"] = difficulty_selection
+
+            # Refresh UI.
+            st.rerun()
 
         # Generate random player for each level 1-10.
         for level in range(1, 11):
