@@ -315,8 +315,9 @@ def create_streamlit_app():
         menu_items={
             'Report a bug': "mailto:contact@onetouchinsights.com",
             'About': "All data comes from Fbref Champions League games (1992-Present- Latest game date in the top left). "
-                     "A player is considered to have played a season if they made a minimum of 1 appearance during that season. "
-                     "Players who have the had another player with the same name (E.g. Marcelo- Left back for Real Madrid/CB "
+                     "A player is considered to have played a season if they made a minimum of 1 appearance during that season "
+                     "(excluding qualifiers). "
+                     "Players who have had another player with the same name (E.g. Marcelo- Left back for Real Madrid/CB "
                      "for Lyon & Besiktas) also play in a European Competition have extra info including their nationality, "
                      "seasons played and Fbref id. You can Google this id to see exactly who the player is."
         }
@@ -376,13 +377,17 @@ def create_streamlit_app():
 
         # Quiz description.
         st.markdown(
-            f"<h1 style='color: #1C9CE0; font-size:14px;'>"
-            f"In this game, you will be given random players who have played in the Champions League.<br><br>You must name the "
-            f"teams that this player has played for in the Champions League.<br><br>The game will initially select a random player "
-            f"who has played at least 10 seasons in the competition. The next player will have played at least 9, then 8 "
-            f"and so on down to 1.<br><br>To complete the game, you will need to get 10 correct answers in a row.<br><br>If you get an "
-            f"answer wrong, you will be forced to start the game again.<br><br> Good luck!"
-            f"</h1>",
+            "<h1 style='color: #1C9CE0; font-size:14px;'>"
+            "In this game, you will be given random players who have played in the Champions League.<br><br>"
+            "You must name the teams that this player has played for in the Champions League.<br><br>"
+            "For the 'Easy' difficulty, the first level will be a random player that played at least 17 seasons in the "
+                "competition, then the next level will be minimum 16 seasons, and so on down to 8 seasons.<br><br>"
+            "For the 'Normal' difficulty, the first level has minimum 14 seasons and the final level minimum 5 seasons.<br><br>"
+            "For the 'Hard' difficulty, the first level has minimum 10 seasons and the final level minimum 1 season.<br><br>"
+            "To complete the game, you will need to get 10 correct answers in a row.<br><br>"
+            "If you get an answer wrong, you will be forced to start the game again.<br><br>"
+            "Good luck!"
+            "</h1>",
             unsafe_allow_html=True
         )
 
