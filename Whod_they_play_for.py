@@ -152,11 +152,12 @@ def load_unique_teams():
 
 #%% Function to load each level for the game/quiz.
 
-def render_level(level, min_seasons):
+def render_level(level, min_seasons, starting_min_seasons):
     """
     Render a level of the game/quiz.
     :param level: Integer between 1 and 10 to indicate the level
     :param min_seasons: Minimum seasons for the selected level.
+    :param starting_min_seasons: Minimum seasons for level 1. Easy mode = 18, Normal = 15, Hard = 10.
     :return: True/False for if player passed level or not.
     """
     # Load all players who have played the minimum number of seasons specified. Don't include players used in previous levels.
@@ -222,7 +223,6 @@ def render_level(level, min_seasons):
         options=load_unique_teams(),
         key=f"multiselect_level_{level}"  # Unique key for each level.
     )
-    st.write(f"{level_players}")
 
     # When all teams are selected, see if the answers from the user are correct.
     if len(st.session_state[selection_key]) == len(level_answers):
@@ -287,7 +287,7 @@ def render_level(level, min_seasons):
 
                 # New player loaded for level 1 as game restarts.
                 if lvl == 1:
-                    st.session_state[f"level_{lvl}_player"] = random.choice(load_players(minimum_seasons=10))
+                    st.session_state[f"level_{lvl}_player"] = random.choice(load_players(minimum_seasons=starting_min_seasons))
 
                 # Delete player from all other levels so they can be generated again if user makes it that far.
                 else:
