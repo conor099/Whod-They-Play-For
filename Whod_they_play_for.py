@@ -329,6 +329,14 @@ def create_streamlit_app():
         }
     )
 
+    # Responsive meta viewport tag. Used to automatically resize the app depending on if the user is on mobile or desktop.
+    st.markdown(
+        """
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        """,
+        unsafe_allow_html=True
+    )
+
     # OneTouch logo with link to website.
     st.markdown(
         f"""
