@@ -370,6 +370,12 @@ def create_streamlit_app():
         unsafe_allow_html=True
     )
 
+    # Button to allow user to check for updated data and clear the cache data.
+    if st.button("🔄 Check for updates."):
+        st.cache_data.clear()
+        st.cache_resource.clear()
+        st.rerun()
+
     # Title.
     st.markdown(
         f"<h1 style='color: #FF800E; font-size:14px;'>"
