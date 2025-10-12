@@ -422,7 +422,7 @@ def create_streamlit_app():
 
     # Game difficulty selector for user.
     difficulty_selection = st.selectbox(
-        label="Please select a difficulty:",
+        label="Please select a difficulty level:",
         options=list(game_difficulty.keys())
     )
 
@@ -461,7 +461,7 @@ def create_streamlit_app():
                 break
 
     else:
-        st.error("Please select a difficulty.")
+        st.error("Please select a difficulty level.")
 
 
 create_streamlit_app()
