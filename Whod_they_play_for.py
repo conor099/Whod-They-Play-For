@@ -316,7 +316,7 @@ def create_streamlit_app():
     st.set_page_config(
         page_title="Who'd they play for?",
         page_icon="Logo_Youtube.png",
-        layout="wide",
+        layout="centered",
         initial_sidebar_state="expanded",
         menu_items={
             'Report a bug': "mailto:contact@onetouchinsights.com",
