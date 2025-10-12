@@ -160,9 +160,14 @@ def render_level(level, min_seasons, starting_min_seasons):
     :param starting_min_seasons: Minimum seasons for level 1. Easy mode = 18, Normal = 15, Hard = 10.
     :return: True/False for if player passed level or not.
     """
-    # Load all players who have played the minimum number of seasons specified. Don't include players used in previous levels.
-    level_players = [p for p in load_players(minimum_seasons=min_seasons) if p not in st.session_state.values()]
-    number_level_players = len(level_players) + 1
+    # Load all players who have played the minimum number of seasons specified.
+    level_players = load_players(minimum_seasons=min_seasons)
+
+    # Count number of players to choose from. Players from previous levels are excluded, so the level is subtracted.
+    number_level_players = len(level_players) - level if level != 1 else len(level_players)
+
+    # Exclude players used in previous levels.
+    level_players = [p for p in level_players if p not in st.session_state.values()]
 
     # Level title and line under title.
     st.markdown(
