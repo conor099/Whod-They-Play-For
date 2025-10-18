@@ -157,7 +157,7 @@ def render_level(level, min_seasons, starting_min_seasons):
     Render a level of the game/quiz.
     :param level: Integer between 1 and 10 to indicate the level
     :param min_seasons: Minimum seasons for the selected level.
-    :param starting_min_seasons: Minimum seasons for level 1. Easy mode = 18, Normal = 15, Hard = 10.
+    :param starting_min_seasons: Minimum seasons for level 1. Easy mode = 17, Normal = 14, Hard = 10.
     :return: True/False for if player passed level or not.
     """
     # Load all players who have played the minimum number of seasons specified.
@@ -228,6 +228,20 @@ def render_level(level, min_seasons, starting_min_seasons):
         options=load_unique_teams(),
         key=f"multiselect_level_{level}"  # Unique key for each level.
     )
+
+    # Allow users to reveal 1 team if they're stuck.
+    if st.session_state["remaining_reveals"] > 0:
+        if st.button(f"Reveal 1 Team ({st.session_state['remaining_reveals']} left)", key=f"reveal_button_{level}"):
+            # Randomly select one correct team.
+            revealed_team = random.choice(level_answers)
+            st.session_state[selection_key].append(revealed_team)
+
+            # Subtract 1 reveal from the allowed number of reveals.
+            st.session_state["remaining_reveals"] -= 1
+            st.success(f"🎁 Revealed one team: {revealed_team}")
+            st.rerun()
+    else:
+        st.markdown("<p style='color: #1C9CE0; font-size:14px;'>No reveals remaining.</p>", unsafe_allow_html=True)
 
     # When all teams are selected, see if the answers from the user are correct.
     if len(st.session_state[selection_key]) == len(level_answers):
@@ -425,6 +439,20 @@ def create_streamlit_app():
         label="Please select a difficulty level:",
         options=list(game_difficulty.keys())
     )
+
+    # Define allowed team reveals per difficulty.
+    reveals_per_difficulty = {
+        "Easy": 3,
+        "Normal": 2,
+        "Hard": 1
+    }
+
+    # Initialize remaining reveal count if not set or difficulty changed.
+    if ("remaining_reveals" not in st.session_state
+    or "previous_difficulty" not in st.session_state
+    or st.session_state["previous_difficulty"] != difficulty_selection):
+        st.session_state["remaining_reveals"] = reveals_per_difficulty.get(difficulty_selection, 0)
+        st.session_state["previous_difficulty"] = difficulty_selection
 
     # Start game based on the game difficulty selected.
     if difficulty_selection != "Select a difficulty level":
