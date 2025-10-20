@@ -340,6 +340,15 @@ def render_level(level, min_seasons, starting_min_seasons):
                     if f"level_{lvl}_player" in st.session_state:
                         del st.session_state[f"level_{lvl}_player"]
 
+            # Reset reveals based on current difficulty
+            current_diff = st.session_state.get("current_difficulty", "Easy")
+            reveals_per_difficulty = {
+                "Easy": 3,
+                "Normal": 2,
+                "Hard": 1
+            }
+            st.session_state["remaining_reveals"] = reveals_per_difficulty.get(current_diff, 0)
+
             # Force rerun so UI updates immediately.
             st.rerun()
 
