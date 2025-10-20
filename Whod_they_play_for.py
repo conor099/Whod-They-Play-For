@@ -222,43 +222,50 @@ def render_level(level, min_seasons, starting_min_seasons):
             unsafe_allow_html=True
         )
 
-    # Selection for user for the teams the player has played for.
+    widget_key = f"multiselect_level_{level}"
+    selection_key = f"level_{level}_selection"
+
+    # Make sure there's a starting value for the widget (so it has something to show).
+    # If the level selection has been set before, use that, otherwise empty list.
+    default_selection = st.session_state.get(selection_key, [])
+
+    # Create the multiselect widget (it will live under widget_key)
     st.session_state[selection_key] = st.multiselect(
         f"Please select {len(level_answers)} teams:",
         options=load_unique_teams(),
-        key=f"multiselect_level_{level}"  # Unique key for each level.
+        default=default_selection,
+        key=widget_key
     )
 
-    # Allow users to reveal 1 team if they're stuck.
+    # Reveal callback (runs safely when button is clicked)
+    def _reveal_callback(level_answers=level_answers, widget_key=widget_key, selection_key=selection_key):
+        remaining = st.session_state.get("remaining_reveals", 0)
+        if remaining <= 0:
+            return
+        current_selected = set(st.session_state.get(widget_key, []))
+        unknown_correct_teams = list(set(level_answers) - current_selected)
+        if not unknown_correct_teams:
+            st.info("All correct teams already revealed.")
+            return
+        revealed_team = random.choice(unknown_correct_teams)
+        new_selection = list(current_selected) + [revealed_team]
+
+        # Update the widget's session_state key inside the callback — allowed.
+        st.session_state[widget_key] = new_selection
+
+        # Keep your selection_key in sync (your app uses this elsewhere)
+        st.session_state[selection_key] = new_selection
+
+        st.session_state["remaining_reveals"] = remaining - 1
+        # optionally show a success message (it will be rendered on next run)
+        st.success(f"🎁 Revealed one team: {revealed_team}")
+
+    # Button with callback — callback modifies session_state safely.
     remaining = st.session_state.get("remaining_reveals", 0)
     if remaining > 0:
-        # Use a button with a per-level key so clicks are independent.
-        if st.button(f"Reveal 1 Team ({remaining} left)", key=f"reveal_button_{level}"):
-            # The current teams that the user has already selected. The reveal button should give a new team.
-            current_selected = set(st.session_state.get(f"multiselect_level_{level}", []))
-
-            # Teams still unknown by the user.
-            unknown_correct_teams = list(set(level_answers) - current_selected)
-
-            if unknown_correct_teams:
-                # Randomly select one unrevealed correct team.
-                revealed_team = random.choice(unknown_correct_teams)
-
-                # Append to the multiselect's stored value so the multiselect shows it.
-                new_selection = list(current_selected) + [revealed_team]
-                st.session_state[f"multiselect_level_{level}"] = new_selection
-
-                # Keep your selection key in sync.
-                st.session_state[selection_key] = new_selection
-
-                # Subtract 1 reveal from the allowed number of reveals.
-                st.session_state["remaining_reveals"] = remaining - 1
-
-                st.success(f"🎁 Revealed one team: {revealed_team}")
-                # Rerun so the UI updates and the multiselect shows the new selection
-                st.rerun()
-            else:
-                st.info("All correct teams already revealed.")
+        st.button(f"Reveal 1 Team ({remaining} left)",
+                  key=f"reveal_button_{level}",
+                  on_click=_reveal_callback)
     else:
         st.markdown("<p style='color: #1C9CE0; font-size:14px;'>No reveals remaining.</p>", unsafe_allow_html=True)
 
