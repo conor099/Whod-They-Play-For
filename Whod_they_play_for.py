@@ -230,16 +230,35 @@ def render_level(level, min_seasons, starting_min_seasons):
     )
 
     # Allow users to reveal 1 team if they're stuck.
-    if st.session_state["remaining_reveals"] > 0:
-        if st.button(f"Reveal 1 Team ({st.session_state['remaining_reveals']} left)", key=f"reveal_button_{level}"):
-            # Randomly select one correct team.
-            revealed_team = random.choice(level_answers)
-            st.session_state[selection_key].append(revealed_team)
+    remaining = st.session_state.get("remaining_reveals", 0)
+    if remaining > 0:
+        # Use a button with a per-level key so clicks are independent.
+        if st.button(f"Reveal 1 Team ({remaining} left)", key=f"reveal_button_{level}"):
+            # The current teams that the user has already selected. The reveal button should give a new team.
+            current_selected = set(st.session_state.get(f"multiselect_level_{level}", []))
 
-            # Subtract 1 reveal from the allowed number of reveals.
-            st.session_state["remaining_reveals"] -= 1
-            st.success(f"🎁 Revealed one team: {revealed_team}")
-            st.rerun()
+            # Teams still unknown by the user.
+            unknown_correct_teams = list(set(level_answers) - current_selected)
+
+            if unknown_correct_teams:
+                # Randomly select one unrevealed correct team.
+                revealed_team = random.choice(unknown_correct_teams)
+
+                # Append to the multiselect's stored value so the multiselect shows it.
+                new_selection = list(current_selected) + [revealed_team]
+                st.session_state[f"multiselect_level_{level}"] = new_selection
+
+                # Keep your selection key in sync.
+                st.session_state[selection_key] = new_selection
+
+                # Subtract 1 reveal from the allowed number of reveals.
+                st.session_state["remaining_reveals"] = remaining - 1
+
+                st.success(f"🎁 Revealed one team: {revealed_team}")
+                # Rerun so the UI updates and the multiselect shows the new selection
+                st.rerun()
+            else:
+                st.info("All correct teams already revealed.")
     else:
         st.markdown("<p style='color: #1C9CE0; font-size:14px;'>No reveals remaining.</p>", unsafe_allow_html=True)
 
