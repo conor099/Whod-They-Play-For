@@ -471,6 +471,7 @@ def create_streamlit_app():
                 "minimum 1 season. 1 hint allowed. <br><br>"
             "To complete the game, you will need to get 10 correct answers in a row.<br><br>"
             "If you get an answer wrong, you will be forced to start the game again.<br><br>"
+            "For more info on the data and game rules, press on the 3 dots in the top right and see the 'About' section.<br><br>"
             "Good luck!"
             "</h1>",
             unsafe_allow_html=True
