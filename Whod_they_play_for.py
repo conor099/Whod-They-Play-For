@@ -222,14 +222,14 @@ def render_level(level, min_seasons, starting_min_seasons):
             unsafe_allow_html=True
         )
 
+    # Keys to store the multiselect widget and user selection.
     widget_key = f"multiselect_level_{level}"
     selection_key = f"level_{level}_selection"
 
-    # Make sure there's a starting value for the widget (so it has something to show).
-    # If the level selection has been set before, use that, otherwise empty list.
+    # Make sure there's a starting value for the widget (so it has something to show). If the level selection has been set before, use that, otherwise empty list.
     default_selection = st.session_state.get(selection_key, [])
 
-    # Create the multiselect widget (it will live under widget_key)
+    # Create the multiselect widget.
     st.session_state[selection_key] = st.multiselect(
         f"Please select {len(level_answers)} teams:",
         options=load_unique_teams(),
@@ -237,28 +237,40 @@ def render_level(level, min_seasons, starting_min_seasons):
         key=widget_key
     )
 
-    # Reveal callback (runs safely when button is clicked)
+    # Function to allow the reveal a team button to insert the revealed team into the multiselect widget.
     def _reveal_callback(level_answers=level_answers, widget_key=widget_key, selection_key=selection_key):
+        # Find number of reveals user has remaining.
         remaining = st.session_state.get("remaining_reveals", 0)
+
+        # Don't run callback function if user has used all of their reveals.
         if remaining <= 0:
             return
+
+        # The currently selected teams by the user.
         current_selected = set(st.session_state.get(widget_key, []))
+
+        # Correct teams that the user has not selected in the widget.
         unknown_correct_teams = list(set(level_answers) - current_selected)
+
+        # If user has all answers, don't allow anything to happen if they click the reveal button.
         if not unknown_correct_teams:
             st.info("All correct teams already revealed.")
             return
+
+        # Randomly select a team to reveal.
         revealed_team = random.choice(unknown_correct_teams)
+
+        # Append the randomly selected correct answer to the widget.
         new_selection = list(current_selected) + [revealed_team]
 
-        # Update the widget's session_state key inside the callback — allowed.
+        # Update the widget's session_state key inside the callback.
         st.session_state[widget_key] = new_selection
 
-        # Keep your selection_key in sync (your app uses this elsewhere)
+        # Keep your selection_key in sync with the new updated selection.
         st.session_state[selection_key] = new_selection
 
+        # Subtract a reveal from the user's remaining reveals.
         st.session_state["remaining_reveals"] = remaining - 1
-        # optionally show a success message (it will be rendered on next run)
-        st.success(f"🎁 Revealed one team: {revealed_team}")
 
     # Button with callback — callback modifies session_state safely.
     remaining = st.session_state.get("remaining_reveals", 0)
@@ -451,9 +463,12 @@ def create_streamlit_app():
             "You must name the teams that this player has played for in the Champions League.<br><br>"
             "Each difficulty level contains 10 levels.<br><br>"
             "For the 'Easy' difficulty, the first level will be a random player that played at least 17 seasons in the "
-                "competition, then the next level will be minimum 16 seasons, and so on down to 8 seasons.<br><br>"
-            "For the 'Normal' difficulty, the first level has minimum 14 seasons and the final level minimum 5 seasons.<br><br>"
-            "For the 'Hard' difficulty, the first level has minimum 10 seasons and the final level minimum 1 season.<br><br>"
+                "competition, then the next level will be minimum 16 seasons, and so on down to 8 seasons. You will also "
+                "be given 3 optional 'hints' to reveal a team if you are stuck on a level.<br><br>"
+            "For the 'Normal' difficulty, the first level contains players with minimum 14 seasons and the final level "
+                "minimum 5 seasons. 2 hints allowed.<br><br>"
+            "For the 'Hard' difficulty, the first level contains players with minimum 10 seasons and the final level "
+                "minimum 1 season. 1 hint allowed. <br><br>"
             "To complete the game, you will need to get 10 correct answers in a row.<br><br>"
             "If you get an answer wrong, you will be forced to start the game again.<br><br>"
             "Good luck!"
