@@ -3,3 +3,4 @@ pymssql
 pandas
 streamlit
 sqlalchemy
+altair<5
