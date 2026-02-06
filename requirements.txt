@@ -1,6 +1,6 @@
 pyodbc
 pymssql
 pandas
-streamlit
+streamlit>=1.29
 sqlalchemy
 altair<5
